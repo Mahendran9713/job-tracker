@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Premium Mobile-First Job Application Tracker">
-  <title>Job Application Tracker</title>
+  <meta name="description" content="Mahi Job Application Tracker - Premium Mobile-First Career Dashboard">
+  <title>Mahi Job Application Tracker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -13,17 +13,17 @@
       --primary: #6366f1;
       --primary-hover: #4f46e5;
       --accent: #a855f7;
-      --bg: #090d16;
-      --card-bg: rgba(17, 24, 39, 0.75);
+      --bg: #070b14;
+      --card-bg: rgba(15, 23, 42, 0.75);
       --card-border: rgba(255, 255, 255, 0.08);
-      --card-border-hover: rgba(99, 102, 241, 0.4);
+      --card-border-hover: rgba(99, 102, 241, 0.45);
       --text: #f8fafc;
       --text-muted: #94a3b8;
       --danger: #ef4444;
       --success: #10b981;
       --warning: #f59e0b;
-      --radius: 16px;
-      --glow: 0 0 25px rgba(99, 102, 241, 0.2);
+      --radius: 18px;
+      --glow: 0 12px 30px rgba(99, 102, 241, 0.25);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -32,17 +32,17 @@
       background-color: var(--bg); 
       color: var(--text); 
       background-image: 
-        radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
-        radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.15) 0%, transparent 40%);
+        radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.18) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.18) 0%, transparent 45%);
       min-height: 100vh; 
       padding-bottom: 50px; 
     }
     
-    /* Expanded Container - Side Gaps Completely Fixed */
+    /* Edge-to-Edge Expanded Container (Side Gaps Fixed) */
     .container { 
-      max-width: 1200px; 
+      max-width: 1400px; 
       margin: 0 auto; 
-      padding: 25px 20px; 
+      padding: 24px 28px; 
     }
     
     header { 
@@ -56,15 +56,30 @@
       border-bottom: 1px solid var(--card-border); 
     }
     
-    .brand { display: flex; align-items: center; gap: 12px; }
-    .brand-logo { font-size: 1.8rem; }
-    h1 { 
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .brand-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+    }
+    .brand-text h1 { 
       font-size: 1.8rem; 
       font-weight: 800; 
       background: linear-gradient(135deg, #a5b4fc 0%, #c084fc 100%); 
       -webkit-background-clip: text; 
       -webkit-text-fill-color: transparent; 
       letter-spacing: -0.5px;
+    }
+    .brand-text p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-weight: 500;
     }
     
     .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
@@ -108,15 +123,15 @@
     /* Metrics Grid */
     .metrics-grid { 
       display: grid; 
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
-      gap: 18px; 
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
+      gap: 20px; 
       margin-bottom: 30px; 
     }
     .metric-card { 
       background: var(--card-bg); 
       backdrop-filter: blur(16px); 
       border: 1px solid var(--card-border); 
-      padding: 22px; 
+      padding: 24px; 
       border-radius: var(--radius); 
       position: relative;
       overflow: hidden;
@@ -125,42 +140,42 @@
     .metric-card::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; width: 100%; height: 3px;
+      top: 0; left: 0; width: 100%; height: 3.5px;
       background: linear-gradient(90deg, var(--primary), var(--accent));
-      opacity: 0.6;
+      opacity: 0.8;
     }
-    .metric-card:hover { transform: translateY(-3px); border-color: var(--card-border-hover); box-shadow: var(--glow); }
+    .metric-card:hover { transform: translateY(-4px); border-color: var(--card-border-hover); box-shadow: var(--glow); }
     .metric-card span { font-size: 0.82rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-    .metric-card h2 { font-size: 2.2rem; margin-top: 8px; font-weight: 800; color: #fff; }
+    .metric-card h2 { font-size: 2.3rem; margin-top: 8px; font-weight: 800; color: #fff; }
 
     /* Controls Panel */
     .controls-card { 
       background: var(--card-bg); 
       backdrop-filter: blur(16px); 
       border: 1px solid var(--card-border); 
-      padding: 18px; 
+      padding: 20px; 
       border-radius: var(--radius); 
       margin-bottom: 30px; 
       display: flex; 
       flex-direction: column; 
-      gap: 15px; 
+      gap: 16px; 
     }
     .search-input { 
       width: 100%; 
       padding: 14px 18px; 
       border-radius: 12px; 
-      background: rgba(0, 0, 0, 0.25); 
+      background: rgba(0, 0, 0, 0.3); 
       border: 1px solid var(--card-border); 
       color: white; 
       font-size: 0.95rem; 
       outline: none; 
       transition: all 0.2s;
     }
-    .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); }
+    .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25); }
     
     .filter-chips { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; }
     .chip { 
-      padding: 8px 18px; 
+      padding: 9px 20px; 
       border-radius: 30px; 
       font-size: 0.85rem; 
       background: rgba(255, 255, 255, 0.04); 
@@ -176,19 +191,20 @@
       color: white; 
       border-color: transparent; 
       font-weight: 700; 
-      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
     }
     .chip:hover:not(.active) { background: rgba(255, 255, 255, 0.08); color: var(--text); }
 
-    /* Cards Grid Layout (Responsive Multi-Column) */
+    /* Responsive Multi-Column Grid */
     .cards-list { 
       display: grid; 
-      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); 
-      gap: 20px; 
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); 
+      gap: 22px; 
     }
     
     @media (max-width: 768px) {
       .cards-list { grid-template-columns: 1fr; }
+      .container { padding: 16px; }
     }
 
     .card { 
@@ -196,20 +212,20 @@
       backdrop-filter: blur(16px); 
       border: 1px solid var(--card-border); 
       border-radius: var(--radius); 
-      padding: 22px; 
+      padding: 24px; 
       transition: all 0.3s ease; 
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
     .card:hover { 
-      transform: translateY(-4px); 
+      transform: translateY(-5px); 
       border-color: var(--card-border-hover); 
       box-shadow: var(--glow); 
     }
-    .card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
-    .card-title { font-size: 1.25rem; font-weight: 700; color: #fff; }
-    .card-subtitle { font-size: 0.95rem; color: var(--text-muted); margin-top: 3px; font-weight: 500; }
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 14px; }
+    .card-title { font-size: 1.3rem; font-weight: 700; color: #fff; }
+    .card-subtitle { font-size: 0.95rem; color: var(--text-muted); margin-top: 4px; font-weight: 500; }
     
     .badge { padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
     .badge-applied { background: rgba(59, 130, 246, 0.15); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.3); }
@@ -218,17 +234,17 @@
     .badge-offer { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.3); }
     .badge-rejected { background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
 
-    .card-details { display: flex; flex-direction: column; gap: 8px; margin: 15px 0; font-size: 0.88rem; color: var(--text-muted); background: rgba(0,0,0,0.15); padding: 12px; border-radius: 10px; }
+    .card-details { display: flex; flex-direction: column; gap: 8px; margin: 16px 0; font-size: 0.88rem; color: var(--text-muted); background: rgba(0,0,0,0.2); padding: 14px; border-radius: 12px; }
     .card-details div { display: flex; align-items: center; gap: 8px; }
     
-    .notes-box { font-size: 0.85rem; color: #cbd5e1; margin-bottom: 15px; background: rgba(255,255,255,0.03); padding: 10px 12px; border-radius: 8px; border-left: 3px solid var(--primary); }
+    .notes-box { font-size: 0.85rem; color: #cbd5e1; margin-bottom: 16px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 10px; border-left: 3px solid var(--primary); }
 
-    .card-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: auto; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05); }
+    .card-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: auto; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.05); }
 
-    /* Modal Styling */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 100; }
+    /* Modal */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 100; }
     .modal-overlay.hidden { display: none; }
-    .modal-content { background: #111827; border: 1px solid var(--card-border-hover); border-radius: var(--radius); width: 100%; max-width: 550px; max-height: 90vh; overflow-y: auto; padding: 28px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
+    .modal-content { background: #0f172a; border: 1px solid var(--card-border-hover); border-radius: var(--radius); width: 100%; max-width: 550px; max-height: 90vh; overflow-y: auto; padding: 30px; box-shadow: 0 25px 50px rgba(0,0,0,0.9); }
     .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
     .form-group { margin-bottom: 16px; }
     .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text-muted); }
@@ -243,8 +259,11 @@
   <div class="container">
     <header>
       <div class="brand">
-        <span class="brand-logo">🚀</span>
-        <h1>Job Application Tracker</h1>
+        <div class="brand-icon">⚡</div>
+        <div class="brand-text">
+          <h1>Mahi Job Application Tracker</h1>
+          <p>Streamline your QA career search with smart analytics & tracking</p>
+        </div>
       </div>
       <div class="btn-group">
         <button class="btn btn-primary" onclick="openModal()">+ Add Application</button>
@@ -325,7 +344,7 @@
         </div>
         <div class="form-group">
           <label>Notes</label>
-          <textarea id="notes" rows="3" placeholder="Key topics, referral details, salary package..."></textarea>
+          <textarea id="notes" rows="3" placeholder="Key topics, referral details, CTC..."></textarea>
         </div>
         <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; padding:14px; font-size:1rem; margin-top:10px;">Save Application</button>
       </form>
@@ -335,7 +354,6 @@
   <script>
     let currentFilter = 'all';
 
-    // Sample Data covering ALL filter categories
     const defaultData = [
       {
         id: "sample_1",
@@ -556,7 +574,7 @@
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(getApps(), null, 2));
       const downloadAnchor = document.createElement('a');
       downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", `job_tracker_backup_${new Date().toISOString().slice(0,10)}.json`);
+      downloadAnchor.setAttribute("download", `mahi_job_tracker_backup_${new Date().toISOString().slice(0,10)}.json`);
       document.body.appendChild(downloadAnchor);
       downloadAnchor.click();
       downloadAnchor.remove();
