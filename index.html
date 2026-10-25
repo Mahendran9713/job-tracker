@@ -28,57 +28,48 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
     
-    body { 
+    html, body {
+      min-height: 100vh;
       background-color: var(--bg); 
       color: var(--text); 
       background-image: 
         radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.18) 0%, transparent 45%),
         radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.18) 0%, transparent 45%);
-      min-height: 100vh; 
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .container { 
-      max-width: 1400px; 
-      width: 100%;
-      margin: 0 auto; 
-      padding: 0 28px 24px 28px; 
-      flex: 1;
     }
 
-    /* Fixed Top Navigation Bar & Metrics (Non-Scrollable Header) */
-    .sticky-top-panel {
-      position: sticky;
+    /* PERMANENTLY FIXED TOP HEADER BAR ONLY */
+    .fixed-header-bar {
+      position: fixed;
       top: 0;
-      z-index: 50;
-      background: rgba(7, 11, 20, 0.88);
+      left: 0;
+      width: 100%;
+      height: 76px;
+      z-index: 100;
+      background: rgba(7, 11, 20, 0.92);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      padding-top: 20px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      margin-bottom: 25px;
+      border-bottom: 1px solid var(--card-border);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      padding: 0 28px;
     }
-    
-    header { 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
-      flex-wrap: wrap; 
-      gap: 20px; 
-      margin-bottom: 20px; 
-      padding-bottom: 15px; 
-      border-bottom: 1px solid var(--card-border); 
+
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
     
     .brand { display: flex; align-items: center; gap: 14px; }
     
-    /* Professional Developer Code Badge Logo */
     .brand-logo-svg {
-      width: 48px;
-      height: 48px;
-      border-radius: 14px;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
       background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
       display: flex;
       align-items: center;
@@ -87,8 +78,8 @@
       flex-shrink: 0;
     }
     .brand-logo-svg svg {
-      width: 26px;
-      height: 26px;
+      width: 22px;
+      height: 22px;
       fill: none;
       stroke: #ffffff;
       stroke-width: 2.2;
@@ -97,7 +88,7 @@
     }
 
     .brand-text h1 { 
-      font-size: 1.75rem; 
+      font-size: 1.55rem; 
       font-weight: 800; 
       background: linear-gradient(135deg, #a5b4fc 0%, #c084fc 100%); 
       -webkit-background-clip: text; 
@@ -105,32 +96,32 @@
       letter-spacing: -0.5px;
     }
     .brand-text p {
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       color: var(--text-muted);
       font-weight: 500;
     }
     
     .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
     .btn { 
-      padding: 10px 20px; 
-      border-radius: 12px; 
+      padding: 9px 18px; 
+      border-radius: 10px; 
       font-weight: 600; 
-      font-size: 0.88rem; 
+      font-size: 0.85rem; 
       cursor: pointer; 
       border: none; 
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); 
+      transition: all 0.2s ease; 
       display: inline-flex; 
       align-items: center; 
-      gap: 8px; 
+      gap: 6px; 
     }
     .btn-primary { 
       background: linear-gradient(135deg, var(--primary), var(--accent)); 
       color: white; 
-      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35); 
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35); 
     }
     .btn-primary:hover { 
       transform: translateY(-2px); 
-      box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5); 
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5); 
     }
     .btn-secondary { 
       background: rgba(255, 255, 255, 0.05); 
@@ -139,21 +130,26 @@
     }
     .btn-secondary:hover { 
       background: rgba(255, 255, 255, 0.1); 
-      border-color: rgba(255, 255, 255, 0.2); 
     }
     .btn-danger { 
       background: rgba(239, 68, 68, 0.15); 
       color: #fca5a5; 
       border: 1px solid rgba(239, 68, 68, 0.3); 
     }
-    .btn-danger:hover { background: rgba(239, 68, 68, 0.25); }
 
-    /* Redesigned Themed Metrics Grid (4 Custom Color Themes) */
+    /* MAIN SCROLLABLE CONTAINER */
+    .main-scroll-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 96px 28px 40px 28px;
+    }
+
+    /* Metrics Grid */
     .metrics-grid { 
       display: grid; 
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
       gap: 16px; 
-      margin-bottom: 16px; 
+      margin-bottom: 20px; 
     }
     .metric-card { 
       backdrop-filter: blur(16px); 
@@ -167,28 +163,24 @@
       justify-content: space-between;
     }
 
-    /* Tile Theme 1: Total Apps (Indigo) */
     .metric-card.theme-total {
       background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(15, 23, 42, 0.8));
       border: 1px solid rgba(99, 102, 241, 0.3);
     }
     .metric-card.theme-total h2 { color: #a5b4fc; }
 
-    /* Tile Theme 2: Active Pipelines (Purple) */
     .metric-card.theme-active {
       background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(15, 23, 42, 0.8));
       border: 1px solid rgba(168, 85, 247, 0.3);
     }
     .metric-card.theme-active h2 { color: #e9d5ff; }
 
-    /* Tile Theme 3: Interviews (Cyan) */
     .metric-card.theme-interviews {
       background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(15, 23, 42, 0.8));
       border: 1px solid rgba(6, 182, 212, 0.3);
     }
     .metric-card.theme-interviews h2 { color: #67e8f9; }
 
-    /* Tile Theme 4: Offers Received (Emerald Gold) */
     .metric-card.theme-offers {
       background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(15, 23, 42, 0.8));
       border: 1px solid rgba(16, 185, 129, 0.4);
@@ -196,11 +188,10 @@
     }
     .metric-card.theme-offers h2 { color: #6ee7b7; }
 
-    .metric-card:hover { transform: translateY(-3px); box-shadow: var(--glow); }
     .metric-card span { font-size: 0.78rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; }
-    .metric-card h2 { font-size: 2.1rem; margin-top: 4px; font-weight: 800; }
+    .metric-card h2 { font-size: 2rem; margin-top: 4px; font-weight: 800; }
 
-    /* Compact Controls Panel */
+    /* Controls Panel */
     .controls-card { 
       background: var(--card-bg); 
       backdrop-filter: blur(16px); 
@@ -211,10 +202,11 @@
       flex-wrap: wrap;
       align-items: center;
       gap: 14px; 
+      margin-bottom: 24px;
     }
     
     .search-wrapper {
-      max-width: 340px;
+      max-width: 320px;
       width: 100%;
     }
     
@@ -253,19 +245,18 @@
     }
     .chip:hover:not(.active) { background: rgba(255, 255, 255, 0.08); color: var(--text); }
 
-    /* Scrollable Cards Grid Container */
+    /* Cards Grid */
     .cards-list { 
       display: grid; 
       grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); 
       gap: 22px; 
-      padding-top: 10px;
     }
     
     @media (max-width: 768px) {
       .cards-list { grid-template-columns: 1fr; }
-      .container { padding: 0 16px 16px 16px; }
+      .fixed-header-bar { padding: 0 16px; height: auto; position: relative; }
+      .main-scroll-container { padding: 16px; }
       .search-wrapper { max-width: 100%; }
-      .sticky-top-panel { position: relative; top: initial; backdrop-filter: none; background: transparent; }
     }
 
     .card { 
@@ -278,7 +269,6 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      position: relative;
     }
     .card:hover { 
       transform: translateY(-5px); 
@@ -286,15 +276,10 @@
       box-shadow: var(--glow); 
     }
 
-    /* Distinct Offer Received Box Highlight */
     .card.offer-highlight {
       background: linear-gradient(145deg, rgba(16, 185, 129, 0.12), rgba(15, 23, 42, 0.85));
       border: 1.5px solid rgba(16, 185, 129, 0.5);
       box-shadow: 0 0 25px rgba(16, 185, 129, 0.25);
-    }
-    .card.offer-highlight:hover {
-      box-shadow: 0 0 35px rgba(16, 185, 129, 0.4);
-      border-color: #10b981;
     }
 
     .card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 14px; }
@@ -305,7 +290,7 @@
     .badge-applied { background: rgba(59, 130, 246, 0.15); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.3); }
     .badge-screening { background: rgba(245, 158, 11, 0.15); color: #fde68a; border: 1px solid rgba(245, 158, 11, 0.3); }
     .badge-tech { background: rgba(168, 85, 247, 0.15); color: #e9d5ff; border: 1px solid rgba(168, 85, 247, 0.3); }
-    .badge-offer { background: rgba(16, 185, 129, 0.3); color: #6ee7b7; border: 1px solid #10b981; box-shadow: 0 0 10px rgba(16, 185, 129, 0.3); }
+    .badge-offer { background: rgba(16, 185, 129, 0.3); color: #6ee7b7; border: 1px solid #10b981; }
     .badge-rejected { background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
 
     .card-details { display: flex; flex-direction: column; gap: 8px; margin: 16px 0; font-size: 0.88rem; color: var(--text-muted); background: rgba(0,0,0,0.2); padding: 14px; border-radius: 12px; }
@@ -315,32 +300,28 @@
 
     .card-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: auto; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.05); }
 
-    /* Modal & Custom Dark Select Dropdown */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 100; }
+    /* Modal Styling */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 200; }
     .modal-overlay.hidden { display: none; }
     .modal-content { background: #0f172a; border: 1px solid var(--card-border-hover); border-radius: var(--radius); width: 100%; max-width: 550px; max-height: 90vh; overflow-y: auto; padding: 30px; box-shadow: 0 25px 50px rgba(0,0,0,0.9); }
     .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
     .form-group { margin-bottom: 16px; }
     .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text-muted); }
     .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border-radius: 10px; background: #0b1120; border: 1px solid var(--card-border); color: white; font-size: 0.95rem; outline: none; }
-    
-    /* Styled Dropdown Options Background */
-    select option {
-      background-color: #0f172a !important;
-      color: #f8fafc !important;
-      padding: 10px;
-    }
-    
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--primary); }
-    
-    .empty-state { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted); background: var(--card-bg); border-radius: var(--radius); border: 1px dashed var(--card-border); }
+    select option { background-color: #0f172a !important; color: #f8fafc !important; }
 
-    /* Modern Footer */
+    .date-time-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
     footer {
       background: rgba(11, 17, 32, 0.9);
       border-top: 1px solid var(--card-border);
       padding: 30px 20px;
-      margin-top: 60px;
+      margin-top: 50px;
+      border-radius: var(--radius);
     }
     .footer-content {
       max-width: 1400px;
@@ -361,57 +342,81 @@
 </head>
 <body>
 
-  <!-- Sticky Top Panel Container (Header & Filter Controls Stay Fixed) -->
-  <div class="sticky-top-panel">
-    <div class="container" style="padding-bottom: 0;">
-      <header>
-        <div class="brand">
-          <div class="brand-logo-svg">
-            <svg viewBox="0 0 24 24">
-              <polyline points="16 18 22 12 16 6"></polyline>
-              <polyline points="8 6 2 12 8 18"></polyline>
-            </svg>
-          </div>
-          <div class="brand-text">
-            <h1>Mahi Job Application Tracker</h1>
-            <p>Streamline your Software Developer career search with smart analytics & tracking</p>
-          </div>
+  <!-- FIXED TOP HEADER BAR -->
+  <div class="fixed-header-bar">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-logo-svg">
+          <svg viewBox="0 0 24 24">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
         </div>
-        <div class="btn-group">
-          <button class="btn btn-primary" onclick="openModal()">+ Add Application</button>
-          <button class="btn btn-secondary" onclick="exportJSON()">Export JSON</button>
-          <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">Import JSON</button>
-          <input type="file" id="importFile" style="display:none" onchange="importJSON(event)" accept=".json">
+        <div class="brand-text">
+          <h1>Mahi Job Application Tracker</h1>
+          <p>Streamline your Software Developer career search with smart analytics & tracking</p>
         </div>
-      </header>
-
-      <!-- Themed Metrics Grid -->
-      <div class="metrics-grid">
-        <div class="metric-card theme-total"><span>Total Apps</span><h2 id="total-apps">0</h2></div>
-        <div class="metric-card theme-active"><span>Active Pipelines</span><h2 id="active-apps">0</h2></div>
-        <div class="metric-card theme-interviews"><span>Interviews Scheduled</span><h2 id="interviews-count">0</h2></div>
-        <div class="metric-card theme-offers"><span>Offers Received</span><h2 id="offers-count">0</h2></div>
       </div>
-
-      <!-- Filter & Reduced Search Controls -->
-      <div class="controls-card">
-        <div class="search-wrapper">
-          <input type="search" class="search-input" id="searchInput" placeholder="Search company, role, or notes..." oninput="render()">
-        </div>
-        <div class="filter-chips">
-          <button class="chip active" onclick="setFilter('all', this)">All Applications</button>
-          <button class="chip" onclick="setFilter('action', this)">⚡ Action Needed</button>
-          <button class="chip" onclick="setFilter('active', this)">🔥 Active</button>
-          <button class="chip" onclick="setFilter('interviewing', this)">🎙️ Interviewing</button>
-          <button class="chip" onclick="setFilter('closed', this)">✅ Closed</button>
-        </div>
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="openModal()">+ Add Application</button>
+        <button class="btn btn-secondary" onclick="exportJSON()">Export JSON</button>
+        <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">Import JSON</button>
+        <input type="file" id="importFile" style="display:none" onchange="importJSON(event)" accept=".json">
       </div>
     </div>
   </div>
 
-  <div class="container">
-    <!-- Cards List Container (Scrolls under sticky top header) -->
+  <!-- MAIN SCROLLABLE CONTAINER -->
+  <div class="main-scroll-container">
+
+    <!-- Metrics Grid -->
+    <div class="metrics-grid">
+      <div class="metric-card theme-total"><span>Total Apps</span><h2 id="total-apps">0</h2></div>
+      <div class="metric-card theme-active"><span>Active Pipelines</span><h2 id="active-apps">0</h2></div>
+      <div class="metric-card theme-interviews"><span>Interviews Scheduled</span><h2 id="interviews-count">0</h2></div>
+      <div class="metric-card theme-offers"><span>Offers Received</span><h2 id="offers-count">0</h2></div>
+    </div>
+
+    <!-- Filter & Search Controls -->
+    <div class="controls-card">
+      <div class="search-wrapper">
+        <input type="search" class="search-input" id="searchInput" placeholder="Search company, role, or notes..." oninput="render()">
+      </div>
+      <div class="filter-chips">
+        <button class="chip active" onclick="setFilter('all', this)">All Applications</button>
+        <button class="chip" onclick="setFilter('action', this)">⚡ Action Needed</button>
+        <button class="chip" onclick="setFilter('active', this)">🔥 Active</button>
+        <button class="chip" onclick="setFilter('interviewing', this)">🎙️ Interviewing</button>
+        <button class="chip" onclick="setFilter('closed', this)">✅ Closed</button>
+      </div>
+    </div>
+
+    <!-- Cards List Container -->
     <div id="cardsList" class="cards-list"></div>
+
+    <!-- Bottom Footer -->
+    <footer>
+      <div class="footer-content">
+        <div class="footer-brand">
+          <div class="brand-logo-svg" style="width: 32px; height: 32px; border-radius: 8px;">
+            <svg viewBox="0 0 24 24" style="width: 18px; height: 18px;">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+          </div>
+          <h3>Mahi Job Application Tracker</h3>
+        </div>
+        <div class="footer-links">
+          <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">Dashboard Top</a>
+          <a href="#" onclick="openModal(); return false;">+ Add Application</a>
+          <a href="#" onclick="exportJSON(); return false;">Backup Data</a>
+          <a href="#" onclick="document.getElementById('importFile').click(); return false;">Restore Data</a>
+        </div>
+        <div class="footer-copy">
+          &copy; 2026 Mahi Job Tracker. Built for Software Developers & Tech Job Seekers. Privacy Focused & Offline-first.
+        </div>
+      </div>
+    </footer>
   </div>
 
   <!-- Modal -->
@@ -447,10 +452,16 @@
           <label>Application Date</label>
           <input type="date" id="appDate" onchange="autoClosePicker(this)">
         </div>
+        
+        <!-- SPLIT INTERVIEW DATE & TIME FOR IMMEDIATE AUTO-CLOSING -->
         <div class="form-group">
           <label>Interview Date & Time</label>
-          <input type="datetime-local" id="interviewDate" onchange="autoClosePicker(this)">
+          <div class="date-time-row">
+            <input type="date" id="interviewDateVal" onchange="autoClosePicker(this)">
+            <input type="time" id="interviewTimeVal" onchange="autoClosePicker(this)">
+          </div>
         </div>
+
         <div class="form-group">
           <label>Follow-up Date</label>
           <input type="date" id="followUpDate" onchange="autoClosePicker(this)">
@@ -463,34 +474,10 @@
           <label>Notes</label>
           <textarea id="notes" rows="3" placeholder="Key topics, tech stack, referral details, CTC..."></textarea>
         </div>
-        <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; padding:14px; font-size:1rem; margin-top:10px;">Save Application</button>
+        <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; padding:12px; font-size:0.95rem; margin-top:8px;">Save Application</button>
       </form>
     </div>
   </div>
-
-  <!-- Bottom Footer with Menus -->
-  <footer>
-    <div class="footer-content">
-      <div class="footer-brand">
-        <div class="brand-logo-svg" style="width: 32px; height: 32px; border-radius: 8px;">
-          <svg viewBox="0 0 24 24" style="width: 18px; height: 18px;">
-            <polyline points="16 18 22 12 16 6"></polyline>
-            <polyline points="8 6 2 12 8 18"></polyline>
-          </svg>
-        </div>
-        <h3>Mahi Job Application Tracker</h3>
-      </div>
-      <div class="footer-links">
-        <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">Dashboard</a>
-        <a href="#" onclick="openModal(); return false;">+ Add Application</a>
-        <a href="#" onclick="exportJSON(); return false;">Backup Data</a>
-        <a href="#" onclick="document.getElementById('importFile').click(); return false;">Restore Data</a>
-      </div>
-      <div class="footer-copy">
-        &copy; 2026 Mahi Job Tracker. Built for Software Developers & Tech Job Seekers. Privacy Focused & Offline-first.
-      </div>
-    </div>
-  </footer>
 
   <script>
     let currentFilter = 'all';
@@ -554,7 +541,7 @@
     ];
 
     function autoClosePicker(element) {
-      if (element && element.blur) {
+      if (element) {
         element.blur();
       }
     }
@@ -677,13 +664,20 @@
       const apps = getApps();
       const id = document.getElementById('appId').value || Date.now().toString();
       
+      const dVal = document.getElementById('interviewDateVal').value;
+      const tVal = document.getElementById('interviewTimeVal').value;
+      let combinedInterview = '';
+      if (dVal) {
+        combinedInterview = tVal ? `${dVal}T${tVal}` : `${dVal}T00:00`;
+      }
+
       const newApp = {
         id,
         companyName: document.getElementById('companyName').value,
         jobRole: document.getElementById('jobRole').value,
         status: document.getElementById('status').value,
         appDate: document.getElementById('appDate').value,
-        interviewDate: document.getElementById('interviewDate').value,
+        interviewDate: combinedInterview,
         followUpDate: document.getElementById('followUpDate').value,
         jobUrl: document.getElementById('jobUrl').value,
         notes: document.getElementById('notes').value
@@ -705,7 +699,16 @@
       document.getElementById('jobRole').value = app.jobRole || '';
       document.getElementById('status').value = app.status || 'Applied';
       document.getElementById('appDate').value = app.appDate || '';
-      document.getElementById('interviewDate').value = app.interviewDate || '';
+      
+      if (app.interviewDate) {
+        const parts = app.interviewDate.split('T');
+        document.getElementById('interviewDateVal').value = parts[0] || '';
+        document.getElementById('interviewTimeVal').value = parts[1] || '';
+      } else {
+        document.getElementById('interviewDateVal').value = '';
+        document.getElementById('interviewTimeVal').value = '';
+      }
+
       document.getElementById('followUpDate').value = app.followUpDate || '';
       document.getElementById('jobUrl').value = app.jobUrl || '';
       document.getElementById('notes').value = app.notes || '';
