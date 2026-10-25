@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="A modern, mobile-first Job Application Tracker with offline localStorage, JSON backups, analytics, and interview alerts.">
+  <meta name="description" content="Job Application Tracker">
   <title>Job Application Tracker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #4f46e5;
-      --primary-hover: #4338ca;
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
       --accent: #8b5cf6;
       --bg: #0f172a;
       --surface: rgba(30, 41, 59, 0.7);
-      --surface-border: rgba(255, 255, 255, 0.1);
+      --surface-border: rgba(255, 255, 255, 0.12);
       --text: #f8fafc;
       --text-muted: #94a3b8;
       --danger: #ef4444;
@@ -32,7 +32,7 @@
     
     .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
     .btn { padding: 10px 18px; border-radius: 12px; font-weight: 600; font-size: 0.9rem; cursor: pointer; border: none; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px; }
-    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4); }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); }
     .btn-primary:hover { transform: translateY(-2px); }
     .btn-secondary { background: rgba(255, 255, 255, 0.05); color: var(--text); border: 1px solid var(--surface-border); }
     .btn-secondary:hover { background: rgba(255, 255, 255, 0.1); }
@@ -68,7 +68,292 @@
     .card-details { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 15px 0; font-size: 0.85rem; color: var(--text-muted); }
     .card-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 15px; }
 
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 100; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 100; }
     .modal-overlay.hidden { display: none; }
     .modal-content { background: #1e293b; border: 1px solid var(--surface-border); border-radius: var(--radius); width: 100%; max-width: 550px; max-height: 90vh; overflow-y: auto; padding: 25px; }
-    .modal-header { display:
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text-muted); }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border-radius: 8px; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--surface-border); color: white; }
+    
+    .empty-state { text-align: center; padding: 40px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Job Application Tracker</h1>
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="openModal()">+ Add Application</button>
+        <button class="btn btn-secondary" onclick="exportJSON()">Export JSON</button>
+        <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">Import JSON</button>
+        <input type="file" id="importFile" style="display:none" onchange="importJSON(event)" accept=".json">
+      </div>
+    </header>
+
+    <!-- Metrics -->
+    <div class="metrics-grid">
+      <div class="metric-card"><span>Total Apps</span><h2 id="total-apps">0</h2></div>
+      <div class="metric-card"><span>Active</span><h2 id="active-apps">0</h2></div>
+      <div class="metric-card"><span>Interviews</span><h2 id="interviews-count">0</h2></div>
+      <div class="metric-card"><span>Offers</span><h2 id="offers-count">0</h2></div>
+    </div>
+
+    <!-- Filter & Search Controls -->
+    <div class="controls-card">
+      <input type="search" class="search-input" id="searchInput" placeholder="Search company, role, or notes..." oninput="render()">
+      <div class="filter-chips">
+        <button class="chip active" onclick="setFilter('all', this)">All</button>
+        <button class="chip" onclick="setFilter('action', this)">Action Needed</button>
+        <button class="chip" onclick="setFilter('active', this)">Active</button>
+        <button class="chip" onclick="setFilter('interviewing', this)">Interviewing</button>
+        <button class="chip" onclick="setFilter('closed', this)">Closed</button>
+      </div>
+    </div>
+
+    <!-- Cards List Container -->
+    <div id="cardsList" class="cards-list"></div>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Add Application</h2>
+        <button class="btn btn-secondary" onclick="closeModal()">&times;</button>
+      </div>
+      <form id="appForm" onsubmit="saveApp(event)">
+        <input type="hidden" id="appId">
+        <div class="form-group">
+          <label>Company Name *</label>
+          <input type="text" id="companyName" required>
+        </div>
+        <div class="form-group">
+          <label>Job Role *</label>
+          <input type="text" id="jobRole" required>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="status">
+            <option value="Applied">Applied</option>
+            <option value="HR Screen">HR Screen</option>
+            <option value="Tech / Coding Round">Tech / Coding Round</option>
+            <option value="Managerial Round">Managerial Round</option>
+            <option value="Offer Received">Offer Received</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Withdrawn">Withdrawn</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Application Date</label>
+          <input type="date" id="appDate">
+        </div>
+        <div class="form-group">
+          <label>Interview Date & Time</label>
+          <input type="datetime-local" id="interviewDate">
+        </div>
+        <div class="form-group">
+          <label>Follow-up Date</label>
+          <input type="date" id="followUpDate">
+        </div>
+        <div class="form-group">
+          <label>Job URL</label>
+          <input type="url" id="jobUrl" placeholder="https://...">
+        </div>
+        <div class="form-group">
+          <label>Notes</label>
+          <textarea id="notes" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">Save Application</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let currentFilter = 'all';
+
+    function getApps() {
+      try {
+        return JSON.parse(localStorage.getItem('job_apps') || '[]');
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveApps(apps) {
+      localStorage.setItem('job_apps', JSON.stringify(apps));
+      render();
+    }
+
+    function render() {
+      const apps = getApps();
+      const searchInput = document.getElementById('searchInput');
+      const search = searchInput ? (searchInput.value || '').toLowerCase() : '';
+      
+      const totalEl = document.getElementById('total-apps');
+      const activeEl = document.getElementById('active-apps');
+      const intEl = document.getElementById('interviews-count');
+      const offEl = document.getElementById('offers-count');
+
+      if (totalEl) totalEl.innerText = apps.length;
+      if (activeEl) activeEl.innerText = apps.filter(a => !['Offer Received', 'Rejected', 'Withdrawn'].includes(a.status)).length;
+      if (intEl) intEl.innerText = apps.filter(a => a.interviewDate).length;
+      if (offEl) offEl.innerText = apps.filter(a => a.status === 'Offer Received').length;
+
+      const filtered = apps.filter(a => {
+        const matchesSearch = (a.companyName || '').toLowerCase().includes(search) || 
+                              (a.jobRole || '').toLowerCase().includes(search) || 
+                              (a.notes || '').toLowerCase().includes(search);
+        if (!matchesSearch) return false;
+
+        if (currentFilter === 'active') return !['Offer Received', 'Rejected', 'Withdrawn'].includes(a.status);
+        if (currentFilter === 'interviewing') return a.interviewDate && !['Offer Received', 'Rejected', 'Withdrawn'].includes(a.status);
+        if (currentFilter === 'closed') return ['Offer Received', 'Rejected', 'Withdrawn'].includes(a.status);
+        if (currentFilter === 'action') return a.followUpDate || a.interviewDate;
+        return true;
+      });
+
+      const container = document.getElementById('cardsList');
+      if (!container) return;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="empty-state">No job applications found. Click "+ Add Application" to create your first entry!</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(a => `
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">${escapeHtml(a.companyName)}</div>
+              <div class="card-subtitle">${escapeHtml(a.jobRole)}</div>
+            </div>
+            <span class="badge badge-${getBadgeClass(a.status)}">${escapeHtml(a.status)}</span>
+          </div>
+          <div class="card-details">
+            <div>📅 Applied: ${a.appDate || 'N/A'}</div>
+            ${a.interviewDate ? `<div>🎙️ Interview: ${new Date(a.interviewDate).toLocaleString()}</div>` : ''}
+            ${a.followUpDate ? `<div>🔔 Follow-up: ${a.followUpDate}</div>` : ''}
+          </div>
+          ${a.notes ? `<div style="font-size:0.85rem; color:#cbd5e1; margin-bottom:10px;">📝 ${escapeHtml(a.notes)}</div>` : ''}
+          <div class="card-actions">
+            ${a.jobUrl ? `<a href="${escapeHtml(a.jobUrl)}" target="_blank" class="btn btn-secondary" style="font-size:0.8rem; text-decoration:none;">Link 🔗</a>` : ''}
+            <button class="btn btn-secondary" onclick="editApp('${a.id}')">Edit</button>
+            <button class="btn btn-danger" onclick="deleteApp('${a.id}')">Delete</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function escapeHtml(str) {
+      return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function getBadgeClass(status) {
+      if (status === 'Applied') return 'applied';
+      if (status === 'HR Screen') return 'screening';
+      if (status && status.includes('Tech')) return 'tech';
+      if (status === 'Offer Received') return 'offer';
+      return 'rejected';
+    }
+
+    function setFilter(filter, el) {
+      currentFilter = filter;
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      render();
+    }
+
+    function openModal() {
+      document.getElementById('appForm').reset();
+      document.getElementById('appId').value = '';
+      document.getElementById('modalTitle').innerText = 'Add Application';
+      document.getElementById('modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.add('hidden');
+    }
+
+    function saveApp(e) {
+      e.preventDefault();
+      const apps = getApps();
+      const id = document.getElementById('appId').value || Date.now().toString();
+      
+      const newApp = {
+        id,
+        companyName: document.getElementById('companyName').value,
+        jobRole: document.getElementById('jobRole').value,
+        status: document.getElementById('status').value,
+        appDate: document.getElementById('appDate').value,
+        interviewDate: document.getElementById('interviewDate').value,
+        followUpDate: document.getElementById('followUpDate').value,
+        jobUrl: document.getElementById('jobUrl').value,
+        notes: document.getElementById('notes').value
+      };
+
+      const index = apps.findIndex(a => a.id === id);
+      if (index > -1) apps[index] = newApp;
+      else apps.push(newApp);
+
+      saveApps(apps);
+      closeModal();
+    }
+
+    function editApp(id) {
+      const app = getApps().find(a => a.id === id);
+      if (!app) return;
+      document.getElementById('appId').value = app.id;
+      document.getElementById('companyName').value = app.companyName || '';
+      document.getElementById('jobRole').value = app.jobRole || '';
+      document.getElementById('status').value = app.status || 'Applied';
+      document.getElementById('appDate').value = app.appDate || '';
+      document.getElementById('interviewDate').value = app.interviewDate || '';
+      document.getElementById('followUpDate').value = app.followUpDate || '';
+      document.getElementById('jobUrl').value = app.jobUrl || '';
+      document.getElementById('notes').value = app.notes || '';
+      
+      document.getElementById('modalTitle').innerText = 'Edit Application';
+      document.getElementById('modal').classList.remove('hidden');
+    }
+
+    function deleteApp(id) {
+      if (confirm('Are you sure you want to delete this application?')) {
+        saveApps(getApps().filter(a => a.id !== id));
+      }
+    }
+
+    function exportJSON() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(getApps(), null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `job_tracker_backup_${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    function importJSON(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          const importedData = JSON.parse(evt.target.result);
+          if (Array.isArray(importedData)) {
+            saveApps(importedData);
+            alert('Data imported successfully!');
+          }
+        } catch(err) {
+          alert('Invalid JSON file format.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // Run render immediately on page load
+    window.addEventListener('DOMContentLoaded', render);
+  </script>
+</body>
+</html>
