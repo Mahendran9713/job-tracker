@@ -371,7 +371,7 @@
 
     <!-- Metrics Grid -->
     <div class="metrics-grid">
-      <div class="metric-card theme-total"><span>Total Apps</span><h2 id="total-apps">0</h2></div>
+      <div class="metric-card theme-total"><span>Total Companies</span><h2 id="total-apps">0</h2></div>
       <div class="metric-card theme-active"><span>Active Pipelines</span><h2 id="active-apps">0</h2></div>
       <div class="metric-card theme-interviews"><span>Interviews Scheduled</span><h2 id="interviews-count">0</h2></div>
       <div class="metric-card theme-offers"><span>Offers Received</span><h2 id="offers-count">0</h2></div>
@@ -453,12 +453,12 @@
           <input type="date" id="appDate" onchange="autoClosePicker(this)">
         </div>
         
-        <!-- SPLIT INTERVIEW DATE & TIME FOR IMMEDIATE AUTO-CLOSING -->
+        <!-- SPLIT INTERVIEW DATE & TIME WITH AUTO-BLUR ON TIME COMPLETION -->
         <div class="form-group">
           <label>Interview Date & Time</label>
           <div class="date-time-row">
             <input type="date" id="interviewDateVal" onchange="autoClosePicker(this)">
-            <input type="time" id="interviewTimeVal" onchange="autoClosePicker(this)">
+            <input type="time" id="interviewTimeVal" onchange="autoClosePicker(this)" oninput="handleTimeInput(this)">
           </div>
         </div>
 
@@ -542,6 +542,12 @@
 
     function autoClosePicker(element) {
       if (element) {
+        element.blur();
+      }
+    }
+
+    function handleTimeInput(element) {
+      if (element && element.value && element.value.length === 5) {
         element.blur();
       }
     }
