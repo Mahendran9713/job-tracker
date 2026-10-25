@@ -173,7 +173,7 @@
   <script>
     let currentFilter = 'all';
 
-    // Initial Sample Data (Inserts automatically if empty)
+    // Sample Data covering ALL filter categories
     const defaultData = [
       {
         id: "sample_1",
@@ -191,11 +191,11 @@
         companyName: "Google",
         jobRole: "Software Test Engineer",
         status: "Applied",
-        appDate: "2026-10-20",
+        appDate: "2026-10-10",
         interviewDate: "",
-        followUpDate: "2026-10-27",
+        followUpDate: "2026-10-22",
         jobUrl: "https://careers.google.com",
-        notes: "Applied via referral. Follow up with HR next week."
+        notes: "Follow-up overdue! Contact HR regarding application update."
       },
       {
         id: "sample_3",
@@ -203,10 +203,10 @@
         jobRole: "Automation QA Specialist",
         status: "HR Screen",
         appDate: "2026-10-18",
-        interviewDate: "2026-10-26T15:00",
+        interviewDate: "",
         followUpDate: "",
         jobUrl: "https://zoho.com/careers",
-        notes: "Initial HR phone screen completed. Waiting for technical round schedule."
+        notes: "Initial HR phone screen completed. Waiting for technical round call."
       },
       {
         id: "sample_4",
@@ -217,14 +217,25 @@
         interviewDate: "",
         followUpDate: "",
         jobUrl: "https://careers.microsoft.com",
-        notes: "Offer letter received. Reviewing compensation package."
+        notes: "Offer letter received. Reviewing CTC & joining date."
+      },
+      {
+        id: "sample_5",
+        companyName: "Flipkart",
+        jobRole: "Backend QA Engineer",
+        status: "Rejected",
+        appDate: "2026-09-15",
+        interviewDate: "",
+        followUpDate: "",
+        jobUrl: "https://flipkart.com/careers",
+        notes: "Position filled internally."
       }
     ];
 
     function getApps() {
       try {
         const stored = localStorage.getItem('job_apps');
-        if (!stored) {
+        if (!stored || JSON.parse(stored).length === 0) {
           localStorage.setItem('job_apps', JSON.stringify(defaultData));
           return defaultData;
         }
@@ -263,7 +274,7 @@
         if (currentFilter === 'active') return !['Offer Received', 'Rejected', 'Withdrawn'].includes(a.status);
         if (currentFilter === 'interviewing') return a.interviewDate && !['Offer Received', 'Rejected', 'Withdrawn'].includes(a.status);
         if (currentFilter === 'closed') return ['Offer Received', 'Rejected', 'Withdrawn'].includes(a.status);
-        if (currentFilter === 'action') return a.followUpDate || a.interviewDate;
+        if (currentFilter === 'action') return (a.followUpDate || a.interviewDate) && !['Offer Received', 'Rejected', 'Withdrawn'].includes(a.status);
         return true;
       });
 
@@ -271,7 +282,7 @@
       if (!container) return;
 
       if (filtered.length === 0) {
-        container.innerHTML = `<div class="empty-state">No job applications found matching your criteria.</div>`;
+        container.innerHTML = `<div class="empty-state">No job applications found matching this filter category.</div>`;
         return;
       }
 
@@ -405,8 +416,5 @@
       reader.readAsText(file);
     }
 
-    // Run render on load
     window.addEventListener('DOMContentLoaded', render);
   </script>
-</body>
-</html>
