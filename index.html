@@ -92,7 +92,7 @@
       </div>
     </header>
 
-    <!-- Metrics -->
+    <!-- Metrics Grid -->
     <div class="metrics-grid">
       <div class="metric-card"><span>Total Apps</span><h2 id="total-apps">0</h2></div>
       <div class="metric-card"><span>Active</span><h2 id="active-apps">0</h2></div>
@@ -173,11 +173,64 @@
   <script>
     let currentFilter = 'all';
 
+    // Initial Sample Data (Inserts automatically if empty)
+    const defaultData = [
+      {
+        id: "sample_1",
+        companyName: "Amazon",
+        jobRole: "QA Engineer / SDET",
+        status: "Tech / Coding Round",
+        appDate: "2026-10-15",
+        interviewDate: "2026-10-28T10:30",
+        followUpDate: "2026-10-29",
+        jobUrl: "https://amazon.jobs",
+        notes: "System design & Data Structures coding round scheduled."
+      },
+      {
+        id: "sample_2",
+        companyName: "Google",
+        jobRole: "Software Test Engineer",
+        status: "Applied",
+        appDate: "2026-10-20",
+        interviewDate: "",
+        followUpDate: "2026-10-27",
+        jobUrl: "https://careers.google.com",
+        notes: "Applied via referral. Follow up with HR next week."
+      },
+      {
+        id: "sample_3",
+        companyName: "Zoho",
+        jobRole: "Automation QA Specialist",
+        status: "HR Screen",
+        appDate: "2026-10-18",
+        interviewDate: "2026-10-26T15:00",
+        followUpDate: "",
+        jobUrl: "https://zoho.com/careers",
+        notes: "Initial HR phone screen completed. Waiting for technical round schedule."
+      },
+      {
+        id: "sample_4",
+        companyName: "Microsoft",
+        jobRole: "Senior QA Analyst",
+        status: "Offer Received",
+        appDate: "2026-09-30",
+        interviewDate: "",
+        followUpDate: "",
+        jobUrl: "https://careers.microsoft.com",
+        notes: "Offer letter received. Reviewing compensation package."
+      }
+    ];
+
     function getApps() {
       try {
-        return JSON.parse(localStorage.getItem('job_apps') || '[]');
+        const stored = localStorage.getItem('job_apps');
+        if (!stored) {
+          localStorage.setItem('job_apps', JSON.stringify(defaultData));
+          return defaultData;
+        }
+        return JSON.parse(stored);
       } catch (e) {
-        return [];
+        return defaultData;
       }
     }
 
@@ -218,7 +271,7 @@
       if (!container) return;
 
       if (filtered.length === 0) {
-        container.innerHTML = `<div class="empty-state">No job applications found. Click "+ Add Application" to create your first entry!</div>`;
+        container.innerHTML = `<div class="empty-state">No job applications found matching your criteria.</div>`;
         return;
       }
 
@@ -352,7 +405,7 @@
       reader.readAsText(file);
     }
 
-    // Run render immediately on page load
+    // Run render on load
     window.addEventListener('DOMContentLoaded', render);
   </script>
 </body>
